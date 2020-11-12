@@ -28,11 +28,12 @@ public class RSA {
 		BigInteger result = BigInteger.valueOf(1);
 		// while(b > 0)
 		while(b.compareTo(BigInteger.valueOf(0)) == 1) {
-			// if(b % 2 == 0)
+			// if(b % 2 == 0), checamos si el dígito binario es 1
 			if(b.mod(BigInteger.valueOf(2)).compareTo(BigInteger.valueOf(1)) == 0) {
 				result = result.multiply(a).mod(m);
 			}
 			a = a.multiply(a).mod(m);
+			// Dividimos para sacar los dígitos del número binario
 			b = b.divide(BigInteger.valueOf(2));
 		}
 		return result;
