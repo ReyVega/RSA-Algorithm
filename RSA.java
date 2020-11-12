@@ -22,6 +22,21 @@ public class RSA {
 			return new Tuple3(gcd.getGCD(), gcd.getY().subtract(b.divide(a).multiply(gcd.getX())), gcd.getX());
 		}
 	}
+	
+	// Exponenciación rápida
+	public static BigInteger fastExponentiation(BigInteger a, BigInteger b, BigInteger m) {
+		BigInteger result = BigInteger.valueOf(1);
+		// while(b > 0)
+		while(b.compareTo(BigInteger.valueOf(0)) == 1) {
+			// if(b % 2 == 0)
+			if(b.mod(BigInteger.valueOf(2)).compareTo(BigInteger.valueOf(1)) == 0) {
+				result = result.multiply(a).mod(m);
+			}
+			a = a.multiply(a).mod(m);
+			b = b.divide(BigInteger.valueOf(2));
+		}
+		return result;
+	}
 
 	public static ArrayList<BigInteger> encriptar(String mensaje, BigInteger e, BigInteger n) {
 		ArrayList<BigInteger> resultado = new ArrayList<BigInteger>();
@@ -31,7 +46,7 @@ public class RSA {
 			BigInteger base = BigInteger.valueOf((int) ch);
 			BigInteger exponent = e;
 			BigInteger mod = n;
-			BigInteger c = base.modPow(exponent, mod);
+			BigInteger c = fastExponentiation(base,exponent,mod);
 
 			resultado.add(c);
 		}
@@ -46,7 +61,7 @@ public class RSA {
 			BigInteger base = num;
 			BigInteger exponent = d;
 			BigInteger mod = n;
-			BigInteger c = base.modPow(exponent, mod);
+			BigInteger c = fastExponentiation(base,exponent,mod);
 
 			char character = (char) (c.intValue());
 			resultado += character;
