@@ -13,7 +13,13 @@ public class RSA {
 	}
 
 	// Método para obtener el máximo común divisor (Algoritmo euclideano extendido)
+	// ed = 1 mod(phi)
+	// d = e^-1 mod(phi)
 	// ax + by = gcd(a, b)
+	// e*d + phi*y = 1
+	// (e*d + phi*y = 1)*mod(phi)   phi*y = 0, ya que es un múlitplo de mod(phi)
+	// ed = 1 mod(phi)
+	// d = e^-1 mod(phi)
 	public static Tuple3 gcdExtended(BigInteger a, BigInteger b) {
 		if (a.compareTo(BigInteger.valueOf(0)) == 0) {
 			return new Tuple3(b, BigInteger.valueOf(0), BigInteger.valueOf(1));
@@ -33,7 +39,7 @@ public class RSA {
 				result = result.multiply(a).mod(m);
 			}
 			a = a.multiply(a).mod(m);
-			// Dividimos para sacar los dígitos del número binario
+			// Dividimos para sacar los dígitos del número binario que corresponden al número decimal
 			b = b.divide(BigInteger.valueOf(2));
 		}
 		return result;
@@ -80,13 +86,13 @@ public class RSA {
 		BigInteger n = p.multiply(q);
 
 		// Calcular phi que es la segunda parte para obtener la llave pública
-		// "e" será la llave pública y sufrirá cambios al encontrar el coprimo
+		// "e" será la llave pública y sufrirá cambios al encontrar el coprimo con respecto de phi
 		// phi = (p - 1) * (q - 1)
 		BigInteger phi = p.subtract(BigInteger.valueOf(1)).multiply(q.subtract(BigInteger.valueOf(1)));
 		BigInteger e = BigInteger.valueOf(2);
 
-		// "e" tienes que ser menor y coprimo de phi
-		// e < phi
+		// "e" tienes que ser menor y coprimo de phi y también mayor a 1
+		// 1 < e < phi
 		// -1 less, 0 equal, 1 greater
 		while (e.compareTo(phi) == -1) {
 			if (gcd(e, phi).compareTo(BigInteger.valueOf(1)) == 0) {
